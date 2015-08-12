@@ -23,9 +23,13 @@ public class RockPaperScissors {
       String userOne = request.queryParams("userOne");
       model.put("userOne", userOne);
 
-      String userTwo = request.queryParams("userTwo");
-      model.put("userTwo", userTwo);
 
+      //if the user two field is left blank, the computer plays.
+      String userTwo = request.queryParams("userTwo");
+      if (userTwo == "") userTwo = "Computer";
+      model.put("userTwo", userTwo);
+      System.out.println(userTwo);
+      
       // run the main code
       ArrayList<String> results = twoPlayerResults();
       Integer gameResults = gameResult(results);
