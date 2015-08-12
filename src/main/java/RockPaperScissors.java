@@ -19,11 +19,6 @@ public class RockPaperScissors {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("template", "templates/output.vtl");
 
-      // run the main code
-      ArrayList<String> results = twoPlayerResults();
-      String gameResults = gameResult(results);
-      //System.out.println(gameResults);
-
       //get the usernames from the forms
       String userOne = request.queryParams("userOne");
       model.put("userOne", userOne);
@@ -31,8 +26,22 @@ public class RockPaperScissors {
       String userTwo = request.queryParams("userTwo");
       model.put("userTwo", userTwo);
 
+      // run the main code
+      ArrayList<String> results = twoPlayerResults();
+      Integer gameResults = gameResult(results);
+      String gameResultsFinal;
+
+      if (gameResults == 0){
+        gameResultsFinal = String.format("It's a tie! Both %s and %s win :)", userOne, userTwo);
+      }else if(gameResults == 1){
+        gameResultsFinal = String.format("%s wins!" , userOne);
+      }
+      else{
+        gameResultsFinal = String.format("%s wins!" , userTwo);
+      }
+
       //output the winner to the page
-      model.put("gameResults", gameResults);
+      model.put("gameResultsFinal", gameResultsFinal);
 
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
@@ -78,21 +87,24 @@ public class RockPaperScissors {
   }
 
       //compare the game moves and determine a winner
-      public static String gameResult (ArrayList<String> results){
-        String printOut;
+      public static Integer gameResult (ArrayList<String> results){
+        Integer printOut;
         String player1Result = results.get(0);
         String player2Result = results.get(1);
 
         if (player1Result == player2Result){
-          printOut = "It's a tie!";
+          // It's a tie!
+          printOut = 0;
         }else if(player1Result== "Rock" && player2Result == "Scissors"){
-          printOut = "Player One wins!";
+          //Player One wins!
+          printOut = 1;
         }else if(player1Result== "Paper" && player2Result == "Rock"){
-          printOut = "Player One wins!";
+          printOut = 1;
         }else if(player1Result== "Scissors" && player2Result == "Paper"){
-          printOut = "Player One wins!";
+          printOut = 1;
         }else {
-          printOut = "Player Two wins!";
+          // Player Two wins!
+          printOut = 2;
         }
         return printOut;
       }
