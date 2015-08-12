@@ -7,6 +7,7 @@ public class Test {
 
     ArrayList<String> results = twoPlayerResults();
     String gameResults = gameResult(results);
+    System.out.println(gameResults);
 
 }
 
@@ -25,10 +26,10 @@ public class Test {
     System.out.println("Index: "+ i);
     System.out.println("Player Result: "+ playerNResult.get(i));
 
+
+    }
     // come back for it later...?
     return playerNResult;
-    }
-
   }
 
     public static String moveResult (Integer number){
@@ -57,37 +58,20 @@ public class Test {
     String printOut;
     String player1Result = results.get(0);
     String player2Result = results.get(1);
-    //is the below line correct? can we pass in two variables?
-    switch(player1Result, player2Result){
-      case "Rock", "Rock":
-        printOut = "It's a tie!";
-        break;
-      case "Rock Paper":
-        printOut = "Player2 wins!";
-        break;
-      case "Rock Scissors":
-        printOut = "Player1 wins!";
-        break;
-      case "Paper Rock":
-        printOut = "Player1 wins!";
-        break;
-      case "Paper Paper":
-        printOut = "It's a tie!";
-        break;
-      case "Paper Scissors":
-        printOut = "Player2 wins!";
-        break;
-      case "Scissors Rock":
-        printOut = "Player2 wins!";
-        break;
-      case "Scissors Paper":
-        printOut = "Player1 wins!";
-        break;
-      default:
-        printOut = "It's a tie!";
-        break;
-      }
-      return printOut;
+
+    if (player1Result == player2Result){
+      printOut = "It's a tie!";
+    }else if(player1Result== "Rock" && player2Result == "Scissors"){
+      printOut = "Player1 wins!";
+    }else if(player1Result== "Paper" && player2Result == "Rock"){
+      printOut = "Player1 wins!";
+    }else if(player1Result== "Scissors" && player2Result == "Paper"){
+      printOut = "Player1 wins!";
+    }else {
+      printOut = "Player2 wins!";
+    }
+
+    return printOut;
   }
 
 }

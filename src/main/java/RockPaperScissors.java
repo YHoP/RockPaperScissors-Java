@@ -1,9 +1,7 @@
-import java.util.Map;
-import java.util.HashMap;
 import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
-import java.util.Random;
+import java.util.*;
 
 public class RockPaperScissors {
   public static void main(String[] args){
@@ -21,49 +19,82 @@ public class RockPaperScissors {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("template", "templates/output.vtl");
 
-      // Set up random result for each move
-      Random move = new Random();
-      Integer eachMove = move.nextInt(3);
-
-      
+      // run the main code
+      ArrayList<String> results = twoPlayerResults();
+      String gameResults = gameResult(results);
+      //System.out.println(gameResults);
 
       //get the usernames from the forms
       String userOne = request.queryParams("userOne");
-      model.put("userOne", request.queryParams("userOne"));
+      model.put("userOne", userOne);
 
       String userTwo = request.queryParams("userTwo");
-      model.put("userTwo", request.queryParams("userTwo"));
+      model.put("userTwo", userTwo);
+
+      //output the winner to the page
+      model.put("gameResults", gameResults);
 
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
   }
 
-  public static String moveResult (Integer number){
-    String playResult;
+  public static ArrayList<String> twoPlayerResults(){
+    ArrayList<String> playerNResult = new ArrayList<String>();
 
-    switch(number){
-      case 0:
-      // output Rock
-      playResult = "Rock";
-        break;
+    for (Integer i =0; i<2; i++){
 
-      case 1:
-      // output Paper
-      playResult = "Paper";
-        break;
+    Random move = new Random();
+    Integer eachMove = move.nextInt(3);
 
-      default:
-      // output Secissors
-      playResult = "Scissors";
-        break;
+    // print out the random number
+  //  System.out.println("Random number" + eachMove);
+    // print out the move
+    playerNResult.add(moveResult(eachMove));
+    //System.out.println("Index: "+ i);
+    //System.out.println("Player Result: "+ playerNResult.get(i));
     }
-    return playResult;
-}
+    return playerNResult;
+  }
 
- public static Boolean gameResult (){
+   //set up the cases for player moves
+    public static String moveResult (Integer number){
+      String playResult;
 
- }
+      switch(number){
+        case 0:
+        playResult = "Rock";
+          break;
 
+        case 1:
+        playResult = "Paper";
+          break;
+
+        default:
+        playResult = "Scissors";
+          break;
+      }
+      return playResult;
+  }
+
+      //compare the game moves and determine a winner
+      public static String gameResult (ArrayList<String> results){
+        String printOut;
+        String player1Result = results.get(0);
+        String player2Result = results.get(1);
+
+        if (player1Result == player2Result){
+          printOut = "It's a tie!";
+        }else if(player1Result== "Rock" && player2Result == "Scissors"){
+          printOut = "Player One wins!";
+        }else if(player1Result== "Paper" && player2Result == "Rock"){
+          printOut = "Player One wins!";
+        }else if(player1Result== "Scissors" && player2Result == "Paper"){
+          printOut = "Player One wins!";
+        }else {
+          printOut = "Player Two wins!";
+        }
+        return printOut;
+      }
 
 }

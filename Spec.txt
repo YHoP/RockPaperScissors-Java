@@ -26,3 +26,13 @@ player 1 and 2 draw.
 4. We print out the game result on the screen
 
 5. If possible, we store the result, and out put first, and then second round
+
+
+<!--
+#if($userOneWin)
+  <h3 class="well">$userOne is the winner!</h3>
+#else if($userTwoWin)
+  <h3 class="well">$userTwo is a leap year!</h3>
+#else
+  <h3 class="well">It's a tie, <a href="/">want to play again?</a></h3>
+#end-->
