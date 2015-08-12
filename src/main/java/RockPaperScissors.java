@@ -52,16 +52,11 @@ public class RockPaperScissors {
     ArrayList<String> playerNResult = new ArrayList<String>();
 
     for (Integer i =0; i<2; i++){
-
+      //make a random number for each player
     Random move = new Random();
     Integer eachMove = move.nextInt(3);
 
-    // print out the random number
-  //  System.out.println("Random number" + eachMove);
-    // print out the move
     playerNResult.add(moveResult(eachMove));
-    //System.out.println("Index: "+ i);
-    //System.out.println("Player Result: "+ playerNResult.get(i));
     }
     return playerNResult;
   }
