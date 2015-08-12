@@ -1,0 +1,28 @@
+1. Have 2 players to play the game -  have them input their names
+
+2. Each player will get their random play
+options are:
+
+round 1
+player one beats player 2.
+
+player one loses to player 2
+
+player 1 and 2 draw.
+
+round 2
+
+player one beats player 2.
+
+player one loses to player 2
+
+player 1 and 2 draw.
+
+
+
+
+3. Compare each player's move, and return the game result
+
+4. We print out the game result on the screen
+
+5. If possible, we store the result, and out put first, and then second round
