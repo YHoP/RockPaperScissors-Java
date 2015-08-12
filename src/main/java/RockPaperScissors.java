@@ -21,17 +21,17 @@ public class RockPaperScissors {
 
       //get the usernames from the forms
       String userOne = request.queryParams("userOne");
+      String playerOneHand = request.queryParams("userOneRadio");
       model.put("userOne", userOne);
-
 
       //if the user two field is left blank, the computer plays.
       String userTwo = request.queryParams("userTwo");
+      String playerTwoHand = request.queryParams("userTwoRadio");
       if (userTwo == "") userTwo = "Computer";
       model.put("userTwo", userTwo);
-      System.out.println(userTwo);
-      
+
       // run the main code
-      ArrayList<String> results = twoPlayerResults();
+      ArrayList<String> results = twoPlayerResults(playerOneHand, playerTwoHand);
       Integer gameResults = gameResult(results);
       String gameResultsFinal;
 
@@ -52,16 +52,20 @@ public class RockPaperScissors {
 
   }
 
-  public static ArrayList<String> twoPlayerResults(){
+  public static ArrayList<String> twoPlayerResults(String playerOneHand, String playerTwoHand){
     ArrayList<String> playerNResult = new ArrayList<String>();
+    // Add player one move to Array index 0
+    playerNResult.add(playerOneHand);
 
-    for (Integer i =0; i<2; i++){
-      //make a random number for each player
+    if (playerTwoHand == "Computer"){
+      //make a random number for Computer
     Random move = new Random();
     Integer eachMove = move.nextInt(3);
-
     playerNResult.add(moveResult(eachMove));
-    }
+  }else{
+    // Add player two move to Array index 2
+    playerNResult.add(playerTwoHand);
+  }
     return playerNResult;
   }
 
