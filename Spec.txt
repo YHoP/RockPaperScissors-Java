@@ -36,3 +36,27 @@ player 1 and 2 draw.
 #else
   <h3 class="well">It's a tie, <a href="/">want to play again?</a></h3>
 #end-->
+
+
+<!-- grab user one's move -->
+<label for="userOneMove">Player One's move:</label>
+<input id="userOneMove" name="userOneMove" class="form-control" type="text">
+
+
+
+public static ArrayList<String> twoPlayerResults(String playerOneHand, String playerTwoHand){
+  ArrayList<String> playerNResult = new ArrayList<String>();
+  // Add player one move to Array index 0
+      playerNResult.add(playerOneHand);
+
+  if (playerTwoHand == "Computer"){
+   //make a random number for Computer
+  Random move = new Random();
+  Integer eachMove = move.nextInt(3);
+  playerNResult.add(moveResult(eachMove));
+   }else{
+     // Add player two move to Array index 2
+     playerNResult.add(playerTwoHand);
+   }
+     return playerNResult;
+   }

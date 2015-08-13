@@ -22,17 +22,22 @@ public class RockPaperScissors {
       //get the usernames from the forms
       String userOne = request.queryParams("userOne");
       String playerOneHand = request.queryParams("userOneRadio");
-      model.put("userOne", userOne);
 
-      //if the user two field is left blank, the computer plays.
       String userTwo = request.queryParams("userTwo");
       String playerTwoHand = request.queryParams("userTwoRadio");
-      if (userTwo == "") userTwo = "Computer";
-      model.put("userTwo", userTwo);
+
+      //if the user two field is left blank, the computer plays.
+      if (userTwo == ""){
+        userTwo = "Computer";
+      }
+
+      Random move = new Random();
+      if (playerTwoHand == "Random"){
+        playerTwoHand = moveResult(move.nextInt(3)); // not sure why it doesn't assign the result
+      }
 
       // run the main code
-      ArrayList<String> results = twoPlayerResults(playerOneHand, playerTwoHand);
-      Integer gameResults = gameResult(results);
+      Integer gameResults = gameResult(playerOneHand, playerTwoHand);
       String gameResultsFinal;
 
       if (gameResults == 0){
@@ -44,30 +49,17 @@ public class RockPaperScissors {
         gameResultsFinal = String.format("%s wins!" , userTwo);
       }
 
-      //output the winner to the page
+      //output the winning result to the page
+      model.put("userOne", userOne);
+      model.put("userOneRadio", playerOneHand);
+      model.put("userTwo", userTwo);
+      model.put("userTwoRadio", playerTwoHand);
       model.put("gameResultsFinal", gameResultsFinal);
 
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
-
   }
 
-  public static ArrayList<String> twoPlayerResults(String playerOneHand, String playerTwoHand){
-    ArrayList<String> playerNResult = new ArrayList<String>();
-    // Add player one move to Array index 0
-    playerNResult.add(playerOneHand);
-
-    if (playerTwoHand == "Computer"){
-      //make a random number for Computer
-    Random move = new Random();
-    Integer eachMove = move.nextInt(3);
-    playerNResult.add(moveResult(eachMove));
-  }else{
-    // Add player two move to Array index 2
-    playerNResult.add(playerTwoHand);
-  }
-    return playerNResult;
-  }
 
    //set up the cases for player moves
     public static String moveResult (Integer number){
@@ -82,34 +74,33 @@ public class RockPaperScissors {
         playResult = "Paper";
           break;
 
-        default:
+        case 2:
         playResult = "Scissors";
+          break;
+
+        default:
+        playResult = "Other";
           break;
       }
       return playResult;
   }
 
-      //compare the game moves and determine a winner
-      public static Integer gameResult (ArrayList<String> results){
-        Integer printOut;
-        String player1Result = results.get(0);
-        String player2Result = results.get(1);
+    //compare the game moves and determine a winner
+    public static Integer gameResult (String playerOne, String playerTwo){
+      Integer printOut;
 
-        if (player1Result == player2Result){
-          // It's a tie!
-          printOut = 0;
-        }else if(player1Result== "Rock" && player2Result == "Scissors"){
-          //Player One wins!
-          printOut = 1;
-        }else if(player1Result== "Paper" && player2Result == "Rock"){
-          printOut = 1;
-        }else if(player1Result== "Scissors" && player2Result == "Paper"){
-          printOut = 1;
-        }else {
-          // Player Two wins!
-          printOut = 2;
-        }
-        return printOut;
+      if (playerOne == playerTwo){
+        printOut = 0; // It's a tie!
+      }else if(playerOne == "Rock" && playerTwo == "Scissors"){
+        printOut = 1; //Player One wins!
+      }else if(playerOne == "Paper" && playerTwo == "Rock"){
+        printOut = 1;
+      }else if(playerOne == "Scissors" && playerTwo == "Paper"){
+        printOut = 1;
+      }else {
+        printOut = 2; // Player Two wins!
       }
+      return printOut;
+    }
 
 }
