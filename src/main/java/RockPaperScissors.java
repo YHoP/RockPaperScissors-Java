@@ -2,12 +2,12 @@ import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
 import java.util.*;
+import java.lang.*;
 
 public class RockPaperScissors {
   public static void main(String[] args){
     String layout = "templates/layout.vtl";
 
-    // set up input page for player's names
     get("/", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("template", "templates/input.vtl");
@@ -15,45 +15,52 @@ public class RockPaperScissors {
     }, new VelocityTemplateEngine());
 
     get("/output", (request, response) -> {
-      //set up the hashmap and set the output
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("template", "templates/output.vtl");
 
       //get the usernames from the forms
-      String userOne = request.queryParams("userOne");
-      String playerOneHand = request.queryParams("userOneRadio");
+      String playerOne = request.queryParams("playerOne");
+      int playerOneMove = Integer.parseInt(request.queryParams("playerOneMove"));
 
-      String userTwo = request.queryParams("userTwo");
-      String playerTwoHand = request.queryParams("userTwoRadio");
+      String playerTwo = request.queryParams("playerTwo");
+      int playerTwoMove = Integer.parseInt(request.queryParams("playerTwoMove"));
 
       //if the user two field is left blank, the computer plays.
-      if (userTwo == ""){
-        userTwo = "Computer";
+      if (playerTwo == ""){
+        playerTwo = "computer";
       }
 
-      Random move = new Random();
-      if (playerTwoHand == "Random"){
-        playerTwoHand = moveResult(move.nextInt(3)); // not sure why it doesn't assign the result
+      if (playerTwoMove == 3){
+        Random move = new Random();
+        playerTwoMove = move.nextInt(3);
       }
 
       // run the main code
-      Integer gameResults = gameResult(playerOneHand, playerTwoHand);
+      Integer gameResults = gameResult(playerOneMove, playerTwoMove);
       String gameResultsFinal;
 
-      if (gameResults == 0){
-        gameResultsFinal = String.format("It's a tie! Both %s and %s win :)", userOne, userTwo);
-      }else if(gameResults == 1){
-        gameResultsFinal = String.format("%s wins!" , userOne);
-      }
-      else{
-        gameResultsFinal = String.format("%s wins!" , userTwo);
-      }
+      switch(gameResults){
+        case 0:
+        gameResultsFinal = String.format("It's a tie! Both %s and %s win :)", playerOne, playerTwo);
+          break;
 
+        case 1:
+        gameResultsFinal = String.format("%s wins!" , playerOne);
+          break;
+
+        case 2:
+        gameResultsFinal = String.format("%s wins!" , playerTwo);
+          break;
+
+        default:
+        gameResultsFinal = "Your code is broken!";
+          break;
+      }
       //output the winning result to the page
-      model.put("userOne", userOne);
-      model.put("userOneRadio", playerOneHand);
-      model.put("userTwo", userTwo);
-      model.put("userTwoRadio", playerTwoHand);
+      model.put("playerOne", playerOne);
+      model.put("playerOneMove", moveResult(playerOneMove));
+      model.put("playerTwo", playerTwo);
+      model.put("playerTwoMove", moveResult(playerTwoMove));
       model.put("gameResultsFinal", gameResultsFinal);
 
       return new ModelAndView(model, layout);
@@ -86,21 +93,20 @@ public class RockPaperScissors {
   }
 
     //compare the game moves and determine a winner
-    public static Integer gameResult (String playerOne, String playerTwo){
-      Integer printOut;
+    public static Integer gameResult (int playerOneMove, int playerTwoMove){
+      Integer result;
 
-      if (playerOne == playerTwo){
-        printOut = 0; // It's a tie!
-      }else if(playerOne == "Rock" && playerTwo == "Scissors"){
-        printOut = 1; //Player One wins!
-      }else if(playerOne == "Paper" && playerTwo == "Rock"){
-        printOut = 1;
-      }else if(playerOne == "Scissors" && playerTwo == "Paper"){
-        printOut = 1;
+      if (playerOneMove == playerTwoMove){
+        result = 0; // It's a tie!
+      }else if(playerOneMove == 0 && playerTwoMove == 2){
+        result = 1; //Player One wins!
+      }else if(playerOneMove == 1 && playerTwoMove == 0){
+        result = 1;
+      }else if(playerOneMove == 2 && playerTwoMove == 1){
+        result = 1;
       }else {
-        printOut = 2; // Player Two wins!
+        result = 2; // Player Two wins!
       }
-      return printOut;
+      return result;
     }
-
 }
